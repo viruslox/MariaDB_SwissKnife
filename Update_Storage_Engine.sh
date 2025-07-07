@@ -3,11 +3,11 @@
 #### (Aria if nothing else specified)
 
 unset MYSQL_USER MYSQL_PASSWORD DATABASE MYSQL_HOST MYSQL_PORT MYSQL_ENGINE
-MYSQLCONNECT=$(which mysql)
-MYSQLANALYZE=$(which mysqlanalyze) 
-MYSQLREPAIR=$(which mysqlrepair)
-MYSQLOPTIMIZE=$(which mysqloptimize)
-MYSQLDUMP=$(which mysqldump)
+MYSQLCONNECT=$(which mysql || which mariadb)
+MYSQLANALYZE=$(which mysqlanalyze || which mariadb-analyze)
+MYSQLREPAIR=$(which mysqlrepair || which mariadb-repair)
+MYSQLOPTIMIZE=$(which mysqloptimize || which mariadb-optimize)
+MYSQLDUMP=$(which mysqldump || which mariadb-dump)
 echo -n "Please give Your database user name: "
 read MYSQL_USER
 echo -n "Please give Your database user $MYSQL_USER password: "
@@ -74,9 +74,9 @@ for TABLE in "${TABLES[@]}"; do
 done
 
 ## Analyze, repair and optimize
-mysqlanalyze -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" $MYSQL_HOST $MYSQL_PORT "$DATABASE"
-mysqlrepair -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" $MYSQL_HOST $MYSQL_PORT "$DATABASE"
-mysqloptimize -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" $MYSQL_HOST $MYSQL_PORT "$DATABASE"
+$MYSQLANALYZE -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" $MYSQL_HOST $MYSQL_PORT "$DATABASE"
+$MYSQLREPAIR -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" $MYSQL_HOST $MYSQL_PORT "$DATABASE"
+$MYSQLOPTIMIZE -u "$MYSQL_USER" -p"$MYSQL_PASSWORD" $MYSQL_HOST $MYSQL_PORT "$DATABASE"
 
 echo "Job done"
 exit 0
